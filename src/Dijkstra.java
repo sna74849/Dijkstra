@@ -47,7 +47,7 @@ public class Dijkstra {
 	/**
 	 * 経路順の順番をカウント
 	 */
-	static int counter;
+	static int counter = 1;
 	
 	/**
 	 * 現在経路探索している座標
@@ -94,15 +94,11 @@ public class Dijkstra {
 		 * {null,null,1,2,0,null,null}, {null,null,null,1,null,0,null},
 		 * {null,null,null,4,null,null,0}};
 		 */
-		char startVertex = 'A';
 		
-		int startIndex = 0;
-		while(charMapping[startIndex] != startVertex) {
-			startIndex++;
-		}
+		int startIndex = 5;
+
 		/* 経路を確立するために並び替え */
 		sequence[0] = startIndex;
-		counter++;
 		enqueue(startIndex);
 
 		/* 最短経路を探索 */
@@ -115,7 +111,7 @@ public class Dijkstra {
 					// この隣接ノードの経路はもう確立している
 						if(matrix[i][1] > vertexes[sequence[i]][sequence[j]] + matrix[j][1]) {
 						// この隣接ノード経由の方がすでに確立している経路より対象ノードへの距離が短い
-							matrix[i][0] = j;
+							matrix[i][0] = sequence[j];
 							matrix[i][1] = vertexes[sequence[i]][sequence[j]] + matrix[j][1];
 						} else {
 						// この隣接ノード経由の方がすでに確立している経路より対象ノードへの距離が長いか同じ
@@ -124,11 +120,11 @@ public class Dijkstra {
 					// この隣接ノードの経路はまだ確立していない
 						if(matrix[i][1] != null){
 						// 対象ノードの経路は既に確立している
-							matrix[j][0] = i;
+							matrix[j][0] = sequence[i];
 							matrix[j][1] = vertexes[sequence[i]][sequence[j]] + matrix[i][1];
 						} else {
 						// 対象ノードの経路はまだ確立していない
-							matrix[j][0] = i;
+							matrix[j][0] = sequence[i];
 							matrix[j][1] = vertexes[sequence[i]][sequence[j]];
 						}
 					}
@@ -137,7 +133,7 @@ public class Dijkstra {
 			}
 		}
 		for(int i=0;i<26;i++) {
-			System.out.print(charMapping[sequence[matrix[i][0]]]+"->"+charMapping[sequence[i]]+":");
+			System.out.print(charMapping[matrix[i][0]]+"->"+charMapping[sequence[i]]+":");
 			System.out.println(String.format("%02d", matrix[i][1]));
 		}
 	}
