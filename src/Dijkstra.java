@@ -55,6 +55,11 @@ public class Dijkstra {
 	static int current;
 	
 	/**
+	 * アルゴリズムの結果を格納する配列
+	 */
+	static Integer[][] matrix = new Integer[26][2];
+
+	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -95,45 +100,97 @@ public class Dijkstra {
 		 * {null,null,null,4,null,null,0}};
 		 */
 		
-		int startIndex = 5;
 
 		/* 経路を確立するために並び替え */
-		sequence[0] = startIndex;
-		enqueue(startIndex);
+		sequence[0] = convertIndex('A');
+		enqueue(sequence[0]);
 
 		/* 最短経路を探索 */
-		Integer[][] matrix = new Integer[26][2];
+		invokeAlgorithm();
+
+		showRoute('A','Z');
+		showEndPoints();
+		
+//		for(int i=0;i<26;i++) {
+//			System.out.print(charMapping[matrix[i][0]]+":");
+//			System.out.println(String.format("%02d", matrix[i][1]));
+//		}
+	}
+
+	/**
+	 * アルゴリズムを実行
+	 */
+	private static void invokeAlgorithm() {
 		for(int i=0;i<26;i++) {
 			for(int j=0;j<26;j++) {		
 				if (vertexes[sequence[i]][sequence[j]] != null) {
 				// 対象ノードと隣接している
-					if(matrix[j][1] != null) {
+					if(matrix[sequence[j]][1] != null) {
 					// この隣接ノードの経路はもう確立している
-						if(matrix[i][1] > vertexes[sequence[i]][sequence[j]] + matrix[j][1]) {
+						if(matrix[sequence[i]][1] > vertexes[sequence[i]][sequence[j]] + matrix[sequence[j]][1]) {
 						// この隣接ノード経由の方がすでに確立している経路より対象ノードへの距離が短い
-							matrix[i][0] = sequence[j];
-							matrix[i][1] = vertexes[sequence[i]][sequence[j]] + matrix[j][1];
+							matrix[sequence[i]][0] = sequence[j];
+							matrix[sequence[i]][1] = vertexes[sequence[i]][sequence[j]] + matrix[sequence[j]][1];
 						} else {
-						// この隣接ノード経由の方がすでに確立している経路より対象ノードへの距離が長いか同じ
+						// この隣接ノード経由の方がすでに確立している経路より対象ノードへの距離が長いか同じ（処理なし）
 						}
 					} else {
 					// この隣接ノードの経路はまだ確立していない
-						if(matrix[i][1] != null){
+						if(matrix[sequence[i]][1] != null){
 						// 対象ノードの経路は既に確立している
-							matrix[j][0] = sequence[i];
-							matrix[j][1] = vertexes[sequence[i]][sequence[j]] + matrix[i][1];
+							matrix[sequence[j]][0] = sequence[i];
+							matrix[sequence[j]][1] = vertexes[sequence[i]][sequence[j]] + matrix[sequence[i]][1];
 						} else {
 						// 対象ノードの経路はまだ確立していない
-							matrix[j][0] = sequence[i];
-							matrix[j][1] = vertexes[sequence[i]][sequence[j]];
+							matrix[sequence[j]][0] = sequence[i];
+							matrix[sequence[j]][1] = vertexes[sequence[i]][sequence[j]];
 						}
 					}
-					// 対象ノードと隣接していない
+					// 対象ノードと隣接していない（処理なし）
 				}
 			}
 		}
+	}
+	
+	/**
+	 * マップの座標を示すキャラクタをインデックスに変換
+	 * 
+	 * @param c
+	 * @return　インデックス
+	 */
+	private static int convertIndex(char c) {
+		int i = 0;
+		while(charMapping[i] != c) {
+			i++;
+		}
+		return i;
+	}
+	
+	/**
+	 * 再起呼び出しで開始位置から終了位置のルートを表示
+	 * Matrixは開始位置からのすべての位置までの最短ルートを
+	 * 設定してあるので知りたい終了位置から開始位置まで逆順で辿る
+	 * 
+	 * @param startVertex
+	 * @param endVertex
+	 */
+	private static void showRoute(char startVertex, char endVertex) {
+		
+		// スタート地点まで来たら再起をブレークする
+		if(charMapping[matrix[convertIndex(endVertex)][0]] == startVertex) {
+			System.out.print(startVertex+"->"+endVertex);
+			return;
+		}
+		
+		// 再起呼び出し
+		showRoute(startVertex,charMapping[matrix[convertIndex(endVertex)][0]]);
+		// 再起呼び出しはFIFO(First in Last Out)なので正順で表示される。
+		System.out.print("->"+endVertex);
+	}
+	
+	private static void showEndPoints() {
 		for(int i=0;i<26;i++) {
-			System.out.print(charMapping[matrix[i][0]]+"->"+charMapping[sequence[i]]+":");
+			System.out.print(charMapping[matrix[i][0]]+"->"+charMapping[i]+":");
 			System.out.println(String.format("%02d", matrix[i][1]));
 		}
 	}
@@ -154,6 +211,7 @@ public class Dijkstra {
 		}
 		current++;
 		if(current<25) {
+			// 再起呼び出し
 			enqueue(sequence[current]);
 		}else {
 			sequence[25] = 24;
