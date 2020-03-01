@@ -4,14 +4,8 @@
  */
 public class Dijkstra {
 
-	/**
-	 * 配列の添字は番号であるためアルファベットに変換するための定数文字列。
-	 */
 	static final char[] charMapping = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 	
-	/**
-	 * マップを表現する二次元配列添字が座標を表し、一次元目の各座標から二次元目の各座標までの距離を表す。nullの場合はルートが確立しておらず、0の場合は自座標。
-	 */
 	static final Integer[][] vertexes = {{0,null,null,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
 							{null,0,null,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
 							{null,null,0,null,null,null,null,null,3,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
@@ -39,43 +33,21 @@ public class Dijkstra {
 							{null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,null},
 							{null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1,1,null,null,null,null,0}};
 
-	/**
-	 * 最短ルートの座標順を配列で表す。vertexesを利用する際はこの配列とコンバートする。
-	 */
-	static Integer[] sequence = new Integer[vertexes.length];
+	static Integer[] sequence = new Integer[26];
 	
-	/**
-	 * アルゴリズムの結果を格納する配列
-	 */
-	private static Integer[][] matrix = new Integer[vertexes.length][2];
+	private static Integer[][] matrix = new Integer[26][2];
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
-		/**
-		 * 開始座標
-		 */
-		final char startVertex = args[0].toCharArray()[0];
 		
-		/**
-		 * 終了座標
-		 */
-		final char endVertex = args[1].toCharArray()[0];
-		
-		/**
-		 * 経路順の順番をカウント
-		 */
 		int counter = 1;
 		
-		/**
-		 * 現在経路探索している座標
-		 */
 		int current = 0;
 
 		// 経路を確立するために並び替え
-		sequence[0] = convertIndex(startVertex);
+		sequence[0] = 0;
 		int number = sequence[0];
 
 		while(counter < sequence.length) {
@@ -145,50 +117,18 @@ public class Dijkstra {
 				}
 			}
 		}
-
-		System.out.println(getRoute(startVertex,endVertex));;
-		System.out.println(getFastestCost(endVertex));
+		String route = charMapping[25]+"<-";
+		int e = 25;
+		while(true){
+			if(matrix[e][0] == 0 || matrix[e][1] == 0) {
+				break;
+			}
+			route =  route + charMapping[matrix[e][0]] +"<-";
+			e = matrix[e][0];
+		}
+		System.out.println(route + "<-" + charMapping[0]);
+		System.out.println("Total:" + matrix[25][1]);
 		showEndPoints();
-	}
-
-	/**
-	 * マップの座標を示すキャラクタをインデックスに変換
-	 * 
-	 * @param c
-	 * @return　インデックス
-	 */
-	private static int convertIndex(char c) {
-		int i = 0;
-		while(charMapping[i] != c) {
-			i++;
-		}
-		return i;
-	}
-	
-	/**
-	 * 再起呼び出しで開始位置から終了位置のルートを表示
-	 * Matrixは開始位置からのすべての位置までの最短ルートを
-	 * 設定してあるので知りたい終了位置から開始位置まで逆順で辿る
-	 * 
-	 * @param startVertex
-	 * @param endVertex
-	 */
-	private static String getRoute(char startVertex, char endVertex) {
-		// スタート地点まで来たまたは孤立座標が終点なら終了でブレークする
-		if(charMapping[matrix[convertIndex(endVertex)][0]] == startVertex || matrix[convertIndex(endVertex)][1] == 0) {
-			return startVertex+"->"+endVertex;
-		}
-		// 再起呼び出しはFIFO(First in Last Out)なので正順で表示される。
-		return getRoute(startVertex,charMapping[matrix[convertIndex(endVertex)][0]]) +"->"+endVertex;
-	}
-		
-	/**
-	 * 最短経路のコストを表示
-	 * 
-	 * @param endVertex
-	 */
-	private static String getFastestCost(char endVertex) {
-		return "Total:" + matrix[convertIndex(endVertex)][1];
 	}
 	
 	/**
