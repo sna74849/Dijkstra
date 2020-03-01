@@ -146,10 +146,8 @@ public class Dijkstra {
 			}
 		}
 
-		showRoute(startVertex,endVertex);
-		System.out.println();
-		showFastestCost(endVertex);
-		System.out.println();
+		System.out.println(getRoute(startVertex,endVertex));;
+		System.out.println(getFastestCost(endVertex));
 		showEndPoints();
 	}
 
@@ -175,21 +173,13 @@ public class Dijkstra {
 	 * @param startVertex
 	 * @param endVertex
 	 */
-	private static void showRoute(char startVertex, char endVertex) {
-		// 孤立座標が終点なら終了
-		if(matrix[convertIndex(endVertex)][1] == 0) {
-			System.out.print(startVertex+"-!->"+endVertex);
-			return;
+	private static String getRoute(char startVertex, char endVertex) {
+		// スタート地点まで来たまたは孤立座標が終点なら終了でブレークする
+		if(charMapping[matrix[convertIndex(endVertex)][0]] == startVertex || matrix[convertIndex(endVertex)][1] == 0) {
+			return startVertex+"->"+endVertex;
 		}
-		// スタート地点まで来たら再起をブレークする
-		if(charMapping[matrix[convertIndex(endVertex)][0]] == startVertex) {
-			System.out.print(startVertex+"->"+endVertex);
-			return;
-		}
-		// 再起呼び出し
-		showRoute(startVertex,charMapping[matrix[convertIndex(endVertex)][0]]);		
 		// 再起呼び出しはFIFO(First in Last Out)なので正順で表示される。
-		System.out.print("->"+endVertex);
+		return getRoute(startVertex,charMapping[matrix[convertIndex(endVertex)][0]]) +"->"+endVertex;
 	}
 		
 	/**
@@ -197,8 +187,8 @@ public class Dijkstra {
 	 * 
 	 * @param endVertex
 	 */
-	private static void showFastestCost(char endVertex) {
-		System.out.println("Total:" + matrix[convertIndex(endVertex)][1]);
+	private static String getFastestCost(char endVertex) {
+		return "Total:" + matrix[convertIndex(endVertex)][1];
 	}
 	
 	/**
