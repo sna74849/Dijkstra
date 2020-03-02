@@ -50,11 +50,11 @@ public class Dijkstra {
 		sequence[0] = 0;
 		int number = sequence[0];
 
-		while(counter < sequence.length) {
+		while(counter < 26) {
 			for(int i=0;i<26;i++) {
 				if(vertexes[number][i] != null && vertexes[number][i] != 0) {
 					boolean flg = true;//座標を既に採用している。
-					for(int j=0;j<sequence.length;j++) {
+					for(int j=0;j<26;j++) {
 						if(sequence[j] != null) {
 							if(sequence[j] == i) {
 								flg = false;//座標をまだ採用していない。
@@ -72,7 +72,7 @@ public class Dijkstra {
 			if(sequence[current] == null) {
 				for(int i=0;i<26;i++) {
 					boolean flg = true;//座標を既に採用している。
-					for(int j=0;j<sequence.length;j++) {
+					for(int j=0;j<26;j++) {
 						if(sequence[j] != null) {
 							if(sequence[j] == i) {
 								flg = false;//座標をまだ採用していない。
