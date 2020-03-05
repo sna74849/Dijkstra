@@ -7,12 +7,12 @@ public class Dijkstra {
 	/**
 	 * 配列の添字は番号であるためアルファベットに変換するための定数文字列。
 	 */
-	static final char[] charMapping = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+	private static final char[] CHAR_MAPPING = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 	
 	/**
 	 * マップを表現する二次元配列添字が座標を表し、一次元目の各座標から二次元目の各座標までの距離を表す。nullの場合はルートが確立しておらず、0の場合は自座標。
 	 */
-	static final Integer[][] vertexes = {{0,null,null,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
+	private static final Integer[][] vertexes_mapping = {{0,null,null,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
 							{null,0,null,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
 							{null,null,0,null,null,null,null,null,3,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
 							{null,null,null,0,2,null,null,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
@@ -42,12 +42,12 @@ public class Dijkstra {
 	/**
 	 * 最短ルートの座標順を配列で表す。vertexesを利用する際はこの配列とコンバートする。
 	 */
-	static Integer[] sequence = new Integer[vertexes.length];
+	private static Integer[] sequence = new Integer[vertexes_mapping.length];
 	
 	/**
 	 * アルゴリズムの結果を格納する配列
 	 */
-	private static Integer[][] matrix = new Integer[vertexes.length][2];
+	private static Integer[][] matrix = new Integer[vertexes_mapping.length][2];
 	
 	/**
 	 * @param args
@@ -57,12 +57,12 @@ public class Dijkstra {
 		/**
 		 * 開始座標
 		 */
-		final char startVertex = args[0].toCharArray()[0];
+		final char start_vertex = args[0].toCharArray()[0];
 		
 		/**
 		 * 終了座標
 		 */
-		final char endVertex = args[1].toCharArray()[0];
+		final char end_vertex = args[1].toCharArray()[0];
 		
 		/**
 		 * 経路順の順番をカウント
@@ -75,12 +75,12 @@ public class Dijkstra {
 		int current = 0;
 
 		// 経路を確立するために並び替え
-		sequence[0] = convertIndex(startVertex);
+		sequence[0] = convertIndex(start_vertex);
 		int number = sequence[0];
 
 		while(counter < sequence.length) {
 			for(int i=0;i<sequence.length;i++) {
-				if(vertexes[number][i] != null && vertexes[number][i] != 0) {
+				if(vertexes_mapping[number][i] != null && vertexes_mapping[number][i] != 0) {
 					if(isNothing(i)) {
 						sequence[counter] = i;
 						counter++;
@@ -103,14 +103,14 @@ public class Dijkstra {
 		// 最短経路を探索
 		for(int i=0;i<sequence.length;i++) {
 			for(int j=0;j<sequence.length;j++) {		
-				if (vertexes[sequence[i]][sequence[j]] != null) {
+				if (vertexes_mapping[sequence[i]][sequence[j]] != null) {
 				// 対象ノードと隣接している
 					if(matrix[sequence[j]][1] != null) {
 					// この隣接ノードの経路はもう確立している
-						if(matrix[sequence[i]][1] > vertexes[sequence[i]][sequence[j]] + matrix[sequence[j]][1]) {
+						if(matrix[sequence[i]][1] > vertexes_mapping[sequence[i]][sequence[j]] + matrix[sequence[j]][1]) {
 						// この隣接ノード経由の方がすでに確立している経路より対象ノードへの距離が短い
 							matrix[sequence[i]][0] = sequence[j];
-							matrix[sequence[i]][1] = vertexes[sequence[i]][sequence[j]] + matrix[sequence[j]][1];
+							matrix[sequence[i]][1] = vertexes_mapping[sequence[i]][sequence[j]] + matrix[sequence[j]][1];
 						} else {
 						// この隣接ノード経由の方がすでに確立している経路より対象ノードへの距離が長いか同じ（処理なし）
 						}
@@ -119,18 +119,18 @@ public class Dijkstra {
 						if(matrix[sequence[i]][1] != null){
 						// 対象ノードの経路は既に確立している
 							matrix[sequence[j]][0] = sequence[i];
-							matrix[sequence[j]][1] = vertexes[sequence[i]][sequence[j]] + matrix[sequence[i]][1];
+							matrix[sequence[j]][1] = vertexes_mapping[sequence[i]][sequence[j]] + matrix[sequence[i]][1];
 						} else {
 						// 対象ノードの経路はまだ確立していない
 							matrix[sequence[j]][0] = sequence[i];
-							matrix[sequence[j]][1] = vertexes[sequence[i]][sequence[j]];
+							matrix[sequence[j]][1] = vertexes_mapping[sequence[i]][sequence[j]];
 						}
 					}
 				}
 			}
 		}
-		System.out.println(getRoute(startVertex,endVertex));;
-		System.out.println(getFastestCost(endVertex));
+		System.out.println(getRoute(start_vertex,end_vertex));;
+		System.out.println(getFastestCost(end_vertex));
 		showEndPoints();
 	}
 
@@ -159,7 +159,7 @@ public class Dijkstra {
 	 */
 	private static int convertIndex(char c) {
 		int i = 0;
-		while(charMapping[i] != c) {
+		while(CHAR_MAPPING[i] != c) {
 			i++;
 		}
 		return i;
@@ -175,11 +175,11 @@ public class Dijkstra {
 	 */
 	private static String getRoute(char startVertex, char endVertex) {
 		// スタート地点まで来たまたは孤立座標が終点なら終了でブレークする
-		if(charMapping[matrix[convertIndex(endVertex)][0]] == startVertex || matrix[convertIndex(endVertex)][1] == 0) {
+		if(CHAR_MAPPING[matrix[convertIndex(endVertex)][0]] == startVertex || matrix[convertIndex(endVertex)][1] == 0) {
 			return startVertex+"->"+endVertex;
 		}
 		// 再起呼び出しはFIFO(First in Last Out)なので正順で表示される。
-		return getRoute(startVertex,charMapping[matrix[convertIndex(endVertex)][0]]) +"->"+endVertex;
+		return getRoute(startVertex,CHAR_MAPPING[matrix[convertIndex(endVertex)][0]]) +"->"+endVertex;
 	}
 		
 	/**
@@ -196,7 +196,7 @@ public class Dijkstra {
 	 */
 	private static void showEndPoints() {
 		for(int i=0;i<26;i++) {
-			System.out.print(charMapping[matrix[i][0]]+"->"+charMapping[i]+":");
+			System.out.print(CHAR_MAPPING[matrix[i][0]]+"->"+CHAR_MAPPING[i]+":");
 			System.out.println(String.format("%02d", matrix[i][1]));
 		}
 	}
