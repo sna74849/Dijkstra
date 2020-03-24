@@ -12,7 +12,7 @@ public class Dijkstra {
 	/**
 	 * マップを表現する二次元配列添字が座標を表し、一次元目の各座標から二次元目の各座標までの距離を表す。nullの場合はルートが確立しておらず、0の場合は自座標。
 	 */
-	private static final Integer[][] vertexes_mapping = {{0,null,null,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
+	private static final Integer[][] VERTEXES = {{0,null,null,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
 							{null,0,null,null,null,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
 							{null,null,0,null,null,null,null,null,3,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
 							{null,null,null,0,2,null,null,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null},
@@ -42,12 +42,12 @@ public class Dijkstra {
 	/**
 	 * 最短ルートの座標順を配列で表す。vertexesを利用する際はこの配列とコンバートする。
 	 */
-	private static Integer[] sequence = new Integer[vertexes_mapping.length];
+	private static Integer[] sequence = new Integer[VERTEXES.length];
 	
 	/**
 	 * アルゴリズムの結果を格納する配列
 	 */
-	private static Integer[][] matrix = new Integer[vertexes_mapping.length][2];
+	private static Integer[][] matrix = new Integer[VERTEXES.length][2];
 	
 	/**
 	 * @param args
@@ -80,7 +80,7 @@ public class Dijkstra {
 
 		while(counter < sequence.length) {
 			for(int i=0;i<sequence.length;i++) {
-				if(vertexes_mapping[number][i] != null && vertexes_mapping[number][i] != 0) {
+				if(VERTEXES[number][i] != null && VERTEXES[number][i] != 0) {
 					if(isNothing(i)) {
 						sequence[counter] = i;
 						counter++;
@@ -103,14 +103,14 @@ public class Dijkstra {
 		// 最短経路を探索
 		for(int i=0;i<sequence.length;i++) {
 			for(int j=0;j<sequence.length;j++) {		
-				if (vertexes_mapping[sequence[i]][sequence[j]] != null) {
+				if (VERTEXES[sequence[i]][sequence[j]] != null) {
 				// 対象ノードと隣接している
 					if(matrix[sequence[j]][1] != null) {
 					// この隣接ノードの経路はもう確立している
-						if(matrix[sequence[i]][1] > vertexes_mapping[sequence[i]][sequence[j]] + matrix[sequence[j]][1]) {
+						if(matrix[sequence[i]][1] > VERTEXES[sequence[i]][sequence[j]] + matrix[sequence[j]][1]) {
 						// この隣接ノード経由の方がすでに確立している経路より対象ノードへの距離が短い
 							matrix[sequence[i]][0] = sequence[j];
-							matrix[sequence[i]][1] = vertexes_mapping[sequence[i]][sequence[j]] + matrix[sequence[j]][1];
+							matrix[sequence[i]][1] = VERTEXES[sequence[i]][sequence[j]] + matrix[sequence[j]][1];
 						} else {
 						// この隣接ノード経由の方がすでに確立している経路より対象ノードへの距離が長いか同じ（処理なし）
 						}
@@ -119,11 +119,11 @@ public class Dijkstra {
 						if(matrix[sequence[i]][1] != null){
 						// 対象ノードの経路は既に確立している
 							matrix[sequence[j]][0] = sequence[i];
-							matrix[sequence[j]][1] = vertexes_mapping[sequence[i]][sequence[j]] + matrix[sequence[i]][1];
+							matrix[sequence[j]][1] = VERTEXES[sequence[i]][sequence[j]] + matrix[sequence[i]][1];
 						} else {
 						// 対象ノードの経路はまだ確立していない
 							matrix[sequence[j]][0] = sequence[i];
-							matrix[sequence[j]][1] = vertexes_mapping[sequence[i]][sequence[j]];
+							matrix[sequence[j]][1] = VERTEXES[sequence[i]][sequence[j]];
 						}
 					}
 				}
