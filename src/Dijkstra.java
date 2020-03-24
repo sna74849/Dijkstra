@@ -178,7 +178,7 @@ public class Dijkstra {
 		if(CHAR_MAPPING[matrix[convertIndex(endVertex)][0]] == startVertex || matrix[convertIndex(endVertex)][1] == 0) {
 			return startVertex+"->"+endVertex;
 		}
-		// 再起呼び出しはFIFO(First in Last Out)なので正順で表示される。
+		// 再起呼び出しはFILO(First in Last Out)なので正順で表示される。
 		return getRoute(startVertex,CHAR_MAPPING[matrix[convertIndex(endVertex)][0]]) +"->"+endVertex;
 	}
 		
