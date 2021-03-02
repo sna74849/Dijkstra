@@ -129,26 +129,7 @@ public class Dijkstra {
 				}
 			}
 		}
-		
-		// 開始位置から終了位置のルートを表示
-		String route = CHAR_MAPPING[25]+"<-";
-		int e = 25;
-		while(true){
-			if(matrix[e][0] == 0 || matrix[e][1] == 0) {
-				break;
-			}
-			route =  route + CHAR_MAPPING[matrix[e][0]] +"<-";
-			e = matrix[e][0];
-		}
-		System.out.println(route + CHAR_MAPPING[0]);
-		
 		// 最短経路のコストを表示
 		System.out.println("Total:" + matrix[25][1]);
-		
-		// 全終点までの中継点とコストを表示
-		for(int i=0;i<26;i++) {
-			System.out.print(CHAR_MAPPING[matrix[i][0]]+"->"+CHAR_MAPPING[i]+":");
-			System.out.println(String.format("%02d", matrix[i][1]));
-		}
-	}	
+	}
 }
