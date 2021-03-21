@@ -64,7 +64,7 @@ public class Dijkstra {
 	public static void main(String[] args) {
 
 		// 経路を確立するために並び替え
-		sequence[0] = 8;
+		sequence[0] = 0;
 		int number = sequence[0];
 
 		while(counter < 26) {
@@ -157,6 +157,6 @@ public class Dijkstra {
 			}
 		}
 		// 最短経路のコストを表示
-		System.out.println("Total:" + matrix[13][1]);
+		System.out.println("Total:" + matrix[25][1]);
 	}
 }
