@@ -48,14 +48,8 @@ public class Dijkstra {
 	 */
 	static Integer[][] matrix = new Integer[26][2];
 
-	/**
-	 * 経路順がどこまで確立したかを示すカウンタ
-	 */
 	static int counter = 1;
 
-	/**
-	 * 現在確立している地点
-	 */
 	static int current = 0;
 
 	/**
