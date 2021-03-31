@@ -1,13 +1,8 @@
 /**
- * @author http://software-engineering-lab.com/
+ * @author Copyright http://software-engineering-lab.com/ All Rights Reserved.
  *
  */
 public class Dijkstra {
-
-	/**
-	 * 各バーテックスの名称一覧
-	 */
-	static final char[] CHAR_MAPPING = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 
 	/**
 	 * 各バーテックスのルートとコストを示す二次元配列
@@ -48,8 +43,14 @@ public class Dijkstra {
 	 */
 	static Integer[][] matrix = new Integer[26][2];
 
+	/**
+	 * カウンタ
+	 */
 	static int counter = 1;
 
+	/**
+	 * 現在の位置
+	 */
 	static int current = 0;
 
 	/**
