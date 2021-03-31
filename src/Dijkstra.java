@@ -1,6 +1,6 @@
 /**
- * @author Copyright http://software-engineering-lab.com/ All Rights Reserved.
- *
+ * @author http://software-engineering-lab.com/
+ * ©2021 Software Engineering Laboratory All Rights Reserved.
  */
 public class Dijkstra {
 
